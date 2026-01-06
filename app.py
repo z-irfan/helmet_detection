@@ -27,8 +27,6 @@ st.title("🪖 Helmet Detection for Construction Sites")
 st.write("Image, Video  Helmet Detection with Email Alert")
 
 # ---------------- LOAD MODEL ----------------
-from ultralytics import YOLO
-
 MODEL_PATH = "best.pt"
 model = YOLO(MODEL_PATH)
 
@@ -215,6 +213,7 @@ elif input_type == "Webcam":
         time.sleep(0.03)
 
     cap.release()
+
 
 
 
