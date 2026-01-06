@@ -25,8 +25,8 @@ st.title("🪖 Helmet Detection for Construction Sites")
 st.write("Image, Video  Helmet Detection with Email Alert")
 
 # ---------------- LOAD MODEL ----------------
-model = YOLO("best.pt")
-
+MODEL_PATH = "best.pt"
+model = YOLO(MODEL_PATH)
 
 # ---------------- EMAIL FUNCTION ----------------
 def send_email_alert(no_helmet_count, image_path):
@@ -210,6 +210,7 @@ elif input_type == "Webcam":
         time.sleep(0.03)
 
     cap.release()
+
 
 
 
