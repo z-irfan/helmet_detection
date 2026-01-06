@@ -33,26 +33,24 @@ model = YOLO(MODEL_PATH)
 
 # ---------------- EMAIL FUNCTION ----------------
 def send_email_alert(no_helmet_count, image_path):
-    ssender_email = st.secrets["EMAIL"]
-    receiver_email = "22x51a05d6@srecnandyal.edu.in"
-    app_password = st.secrets["PASSWORD"]   
-
-    subject = "🚨 Helmet Safety Alert (Image Attached)"
-    body = f"""
-ALERT!
-
-{no_helmet_count} worker(s) detected WITHOUT safety helmet.
-
-Please find the attached image for verification.
-
-–  Helmet Detection System
-"""
+    sender_email = st.secrets["EMAIL"]
+    receiver_email = st.secrets["EMAIL"]   # or different email
+    app_password = st.secrets["PASSWORD"]
 
     msg = MIMEMultipart()
     msg["From"] = sender_email
     msg["To"] = receiver_email
-    msg["Subject"] = subject
+    msg["Subject"] = "🚨 Helmet Safety Alert"
+
+    body = f"""
+ALERT!
+
+{no_helmet_count} worker(s) detected WITHOUT helmet.
+
+Please see the attached image.
+"""
     msg.attach(MIMEText(body, "plain"))
+
 
     with open(image_path, "rb") as attachment:
         part = MIMEBase("application", "octet-stream")
@@ -213,6 +211,7 @@ elif input_type == "Webcam":
         time.sleep(0.03)
 
     cap.release()
+
 
 
 
