@@ -1,11 +1,10 @@
-streamlit==1.32.0
+streamlit>=1.32.0
 
-# Install ultralytics WITHOUT pulling opencv-python
-ultralytics==8.0.196 --no-deps
+# Newer Ultralytics works cleanly on cloud
+ultralytics>=8.1.0
 
-# Manual dependencies (cloud-safe)
-torch
-torchvision
-opencv-python-headless==4.9.0.80
+opencv-python-headless>=4.9.0
 numpy
 Pillow
+torch
+torchvision
