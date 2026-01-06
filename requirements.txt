@@ -1,6 +1,10 @@
 streamlit==1.32.0
 ultralytics==8.0.196
+
+# Force headless OpenCV and REMOVE GUI OpenCV
 opencv-python-headless==4.9.0.80
+opencv-python==0.0.0
+
 numpy
 Pillow
 torch
