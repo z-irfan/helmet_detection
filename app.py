@@ -1,3 +1,5 @@
+import os
+IS_CLOUD = os.environ.get("STREAMLIT_CLOUD", "") != ""
 import streamlit as st
 from ultralytics import YOLO
 import cv2
@@ -10,8 +12,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 import time
-import os
-IS_CLOUD = os.environ.get("STREAMLIT_CLOUD", "") != ""
 
 
 # ---------------- PAGE CONFIG ----------------
@@ -176,7 +176,9 @@ elif input_type == "Webcam":
     start = st.checkbox("Start Webcam")
     stop = st.checkbox("Stop Webcam")
 
-    cap = cv2.VideoCapture(0)
+    if not IS_CLOUD:
+        cap = cv2.VideoCapture(0)
+
     stframe = st.empty()
     email_sent = False
 
@@ -211,4 +213,5 @@ elif input_type == "Webcam":
         time.sleep(0.03)
 
     cap.release()
+
 
