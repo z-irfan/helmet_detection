@@ -1,11 +1,11 @@
 streamlit==1.32.0
-ultralytics==8.0.196
 
-# Force headless OpenCV and REMOVE GUI OpenCV
-opencv-python-headless==4.9.0.80
-opencv-python==0.0.0
+# Install ultralytics WITHOUT pulling opencv-python
+ultralytics==8.0.196 --no-deps
 
-numpy
-Pillow
+# Manual dependencies (cloud-safe)
 torch
 torchvision
+opencv-python-headless==4.9.0.80
+numpy
+Pillow
