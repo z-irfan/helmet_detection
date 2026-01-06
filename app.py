@@ -9,8 +9,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
-import os
 import time
+import os
+IS_CLOUD = os.environ.get("STREAMLIT_CLOUD", "") != ""
+
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
@@ -72,10 +74,11 @@ Please find the attached image for verification.
 # ---------------- SIDEBAR ----------------
 st.sidebar.header("Settings")
 
-input_type = st.sidebar.selectbox(
-    "Choose Input Type",
-    ["Image", "Video", "Webcam"]
-)
+options = ["Image", "Video"]
+if not IS_CLOUD:
+    options.append("Webcam")
+
+input_type = st.sidebar.selectbox("Choose Input Type", options)
 
 conf_threshold = st.sidebar.slider(
     "Confidence Threshold",
@@ -208,3 +211,4 @@ elif input_type == "Webcam":
         time.sleep(0.03)
 
     cap.release()
+
