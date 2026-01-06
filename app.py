@@ -33,9 +33,9 @@ model = YOLO(MODEL_PATH)
 
 # ---------------- EMAIL FUNCTION ----------------
 def send_email_alert(no_helmet_count, image_path):
-    sender_email = "22x51a05c5@srecnandyal.edu.in"
+    ssender_email = st.secrets["EMAIL"]
     receiver_email = "22x51a05d6@srecnandyal.edu.in"
-    app_password = "titk ihla mykt eiju"   
+    app_password = st.secrets["PASSWORD"]   
 
     subject = "🚨 Helmet Safety Alert (Image Attached)"
     body = f"""
@@ -213,6 +213,7 @@ elif input_type == "Webcam":
         time.sleep(0.03)
 
     cap.release()
+
 
 
 
