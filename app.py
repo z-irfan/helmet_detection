@@ -1,5 +1,7 @@
 import os
-IS_CLOUD = os.environ.get("STREAMLIT_CLOUD", "") != ""
+IS_CLOUD = True
+os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
+os.environ["OPENCV_LOG_LEVEL"] = "ERROR"
 import streamlit as st
 from ultralytics import YOLO
 import cv2
@@ -25,8 +27,11 @@ st.title("🪖 Helmet Detection for Construction Sites")
 st.write("Image, Video  Helmet Detection with Email Alert")
 
 # ---------------- LOAD MODEL ----------------
+from ultralytics import YOLO
+
 MODEL_PATH = "best.pt"
 model = YOLO(MODEL_PATH)
+
 
 # ---------------- EMAIL FUNCTION ----------------
 def send_email_alert(no_helmet_count, image_path):
@@ -210,6 +215,7 @@ elif input_type == "Webcam":
         time.sleep(0.03)
 
     cap.release()
+
 
 
 
