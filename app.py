@@ -1,4 +1,5 @@
 import os
+import re
 IS_CLOUD = True
 os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
 os.environ["OPENCV_LOG_LEVEL"] = "ERROR"
@@ -15,12 +16,22 @@ from email.mime.base import MIMEBase
 from email import encoders
 import time
 
+def is_valid_email(email):
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
+
+
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="Helmet Detection System",
     page_icon="🪖",
     layout="wide"
+)
+
+st.markdown("### 📧 Alert Settings")
+user_email = st.text_input(
+    "Enter your email to receive alerts",
+    placeholder="example@gmail.com"
 )
 
 st.title("🪖 Helmet Detection for Construction Sites")
@@ -32,9 +43,8 @@ model = YOLO(MODEL_PATH)
 
 
 # ---------------- EMAIL FUNCTION ----------------
-def send_email_alert(no_helmet_count, image_path):
+def send_email_alert(no_helmet_count, image_path, receiver_email):
     sender_email = st.secrets["EMAIL"]
-    receiver_email = st.secrets["EMAIL"]   # or different email
     app_password = st.secrets["PASSWORD"]
 
     msg = MIMEMultipart()
@@ -116,10 +126,16 @@ if input_type == "Image":
 
         st.success(f"🪖 Helmet: {helmet_count} | ❌ No Helmet: {no_helmet_count}")
 
-        if no_helmet_count > 0:
+        if user_email and is_valid_email(user_email):
             st.error("⚠️ Safety Alert: Worker without helmet is detected!")
-            send_email_alert(no_helmet_count, temp_img.name)
-            st.info("📧 Email sent with detected image")
+            
+            if user_email:
+                send_email_alert(no_helmet_count, temp_img.name, user_email)
+                st.success(f"📧 Alert sent to {user_email}")
+            
+            else:
+                st.warning("⚠️ Enter email to receive alert")
+
 
 # ---------------- VIDEO MODE ----------------
 elif input_type == "Video":
@@ -159,9 +175,15 @@ elif input_type == "Video":
             if no_helmet_count > 0 and not email_sent:
                 temp_img = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
                 cv2.imwrite(temp_img.name, annotated)
-                send_email_alert(no_helmet_count, temp_img.name)
+                
+                if user_email and is_valid_email(user_email):
+                    send_email_alert(no_helmet_count, temp_img.name, user_email)
+                    st.success(f"📧 Alert sent to {user_email}")
+                else:
+                    st.warning("⚠️ Enter email to receive alert")
+                
                 email_sent = True
-                st.warning("📧 Email sent for video violation")
+
 
             time.sleep(0.03)
 
@@ -204,13 +226,19 @@ elif input_type == "Webcam":
         if no_helmet_count > 0 and not email_sent:
             temp_img = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
             cv2.imwrite(temp_img.name, annotated)
-            send_email_alert(no_helmet_count, temp_img.name)
+            if user_email and is_valid_email(user_email):
+                send_email_alert(no_helmet_count, temp_img.name, user_email)
+                st.success(f"📧 Alert sent to {user_email}")
+            elif no_helmet_count > 0:
+                st.warning("⚠️ Enter email to receive alert")
+
             email_sent = True
             st.warning("📧 Email sent for webcam violation")
 
         time.sleep(0.03)
 
     cap.release()
+
 
 
 
